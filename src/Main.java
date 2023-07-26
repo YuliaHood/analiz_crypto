@@ -18,7 +18,7 @@ public class Main {
                 isValidPath = true;
                 readFile(path);
             }else {
-                System.out.println("Путь до файлу не вірний( спробуйте будь ласка ще раз!");
+                System.out.println("Шлях до файлу не вірний( спробуйте будь ласка ще раз!");
                 path = scanner.nextLine();
             }
         }
@@ -42,13 +42,18 @@ public class Main {
                 "Якщо ви хочете зашифрувати данні шифром Цезаря , введіть " + "+\n" +
                 "Якщо ви хочете розшифрувати данні шифром Цезаря , введіть " + "-");
 
-        String userSign = scanner.nextLine();
-        if(userSign.equals("+")){
-            encrypt(path, key, scanner);
-        } else if (userSign.equals("-")) {
+        boolean cheak = false;
+        while (!cheak) {
+            String userSign = scanner.nextLine();
+            if (userSign.equals("+")) {
+                encrypt(path, key, scanner);
+                cheak = true;
+            } else if (userSign.equals("-")) {
 
-        }else {
-            System.out.println("Введіть вірний символ!");
+            } else {
+                System.out.println("Введіть вірний символ!");
+                //userSign = scanner.nextLine();
+            }
         }
     }
 
@@ -67,18 +72,15 @@ public class Main {
             char[] charArray = linen.toCharArray();
             for (int i = 0; i < linen.length(); i++){
                 int index = search(elementsOfAlphabetic,charArray[i]);
-                //String snns = String.valueOf(charArray[index]); //
-                //System.out.println(snns);                       // проверка
                 int newIndex = (index + key) % elementsOfAlphabetic.length;
                 String newChar = String.valueOf(elementsOfAlphabetic[newIndex]);
                 bufferedWriter.write(newChar);
-                System.out.println("well done");
             }
             bufferedReader.close();
             bufferedWriter.close();
             readNAme(FilePath);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("О ні! Виникла помилка");;
         }
     }
     public static boolean isValidFilePath(String filePath) {
@@ -95,7 +97,7 @@ public class Main {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                System.out.println("Зчитанні данні з вашого файлу: " + line);
             }
             reader.close();
         } catch (IOException e) {
@@ -108,7 +110,7 @@ public class Main {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                System.out.println("Данні успішно зашифровані: " + line);
             }
             reader.close();
         } catch (IOException e) {
