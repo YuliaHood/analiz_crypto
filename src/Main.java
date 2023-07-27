@@ -66,7 +66,7 @@ public class Main {
                 'ж', 'з', 'и', 'і', 'ї', 'й', 'к', 'л',
                 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у',
                 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ь', 'ю',
-                'я', ':', '!', '?', ',', '.', '\"', ' ',};
+                'я', ':', '!', '?', ',', '.', '\"', ' ','-'};
 
         String FilePath = "encrypted.txt";
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
@@ -97,7 +97,7 @@ public class Main {
                 'ж', 'з', 'и', 'і', 'ї', 'й', 'к', 'л',
                 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у',
                 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ь', 'ю',
-                'я', ':', '!', '?', ',', '.', '\"', ' ',};
+                'я', ':', '!', '?', ',', '.', '\"', ' ', '-'};
 
         String FilePath = "decrypted.txt";
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
@@ -106,6 +106,9 @@ public class Main {
             char[] charArray = lines.toCharArray();
             for (int i = 0; i < lines.length(); i++) {
                 int index = search(elementsOfAlphabetic, charArray[i]);
+                if(index == -1){
+                    continue;
+                }
                 int newIndex = (index - key) % elementsOfAlphabetic.length;
                 if (newIndex <= 0) {
                     newIndex = (index - key + elementsOfAlphabetic.length) % elementsOfAlphabetic.length;
@@ -150,7 +153,7 @@ public class Main {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println("Данні успішно зашифровані: " + line);
+                System.out.println("Данні успішно опрацьованні: " + line);
             }
             reader.close();
         } catch (IOException e) {
