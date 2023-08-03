@@ -111,6 +111,7 @@ public class Main {
              BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FilePath))) {
             String lines = bufferedReader.readLine();
             char[] charArray = lines.toCharArray();
+
             for (int i = 0; i < lines.length(); i++) {
                 int index = search(elementsOfAlphabetic, charArray[i]);
                 if (index == -1) {
