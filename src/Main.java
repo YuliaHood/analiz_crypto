@@ -160,7 +160,7 @@ public class Main {
         String pathOf = "decriptBrdForse.txt";
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
              BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(pathOf))) {
-            String line = bufferedReader.readLine();  //C:\Users\admin\training\julia.exe\bin\new text.txt
+            String line = bufferedReader.readLine();
             char[] newElement = new char[line.length()];
             boolean found = false;
             for (int key = 1; key < elementsOfAlphabetic.length; key++) {
