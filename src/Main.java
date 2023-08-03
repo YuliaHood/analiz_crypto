@@ -21,30 +21,38 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        boolean isValidPath = false;
 
         System.out.println("Добрий день! Введіть будь ласка шлях до вашохо файлу");
         String path = scanner.nextLine();
 
+        boolean isValidPath = false;
+
         while (!isValidPath) {
-            if (isValidFilePath(path)) {
-                isValidPath = true;
-                readFile(path);
-            } else {
-                System.out.println("Шлях до файлу не вірний( спробуйте будь ласка ще раз!");
-                path = scanner.nextLine();
+            try {
+                Path filePath = Paths.get(path);
+                if (Files.exists(filePath) && Files.isRegularFile(filePath) && Files.isReadable(filePath)) {
+                    isValidPath = true;
+                    readFile(path);
+                } else {
+                    System.out.println("Шлях до файлу не вірний. Спробуйте ще раз!");
+                    path = scanner.nextLine();
+                }
+            } catch (InvalidPathException e) {
+                System.out.println("Некоректний шлях. Спробуйте ще раз!");
             }
         }
+
         System.out.println("Оберіть що саме ви хочете зробити з данними файлу :\n" +
                 "Якщо ви хочете зашифрувати данні шифром Цезаря , введіть " + "+\n" +
                 "Якщо ви хочете розшифрувати данні шифром Цезаря , введіть " + "-\n" +
                 "Якщо ви хочете використати метод \"brude force\" , введіть" + "!");
+
         String userSign = scanner.nextLine();
 
         int key = 0;
-        if(userSign.equals("!")){
+        if (userSign.equals("!")) {
             System.out.println("Ключ вводити не потрібно!");
-        }else {
+        } else {
             System.out.println("Тепер введіть ключ " + "(Обовязково число!)");
             boolean useNotTrue = false;
             while (!useNotTrue) {
@@ -123,12 +131,69 @@ public class Main {
         }
     }
 
-    public static boolean isValidFilePath(String filePath) {
-        try {
-            Path path = Paths.get(filePath);
-            return Files.exists(path) && Files.isRegularFile(path) && Files.isReadable(path);
-        } catch (InvalidPathException e) {
-            return false;
+    public static void brdForce(String path) {
+
+        String[] words = new String[]{
+                "При", "Дяк", "Буд", "Кох", "Род", "Дру", "Укр", "Мов", "Їжа", "Вод",
+                "Сон", "Дощ", "Зим", "Вес", "Літ", "Осі", "Міс", "Сел", "Люб", "Діт", "Шко", "Вчи",
+                "Кни", "Муз", "Теа", "Філ", "Мис", "Іст", "Кул", "Спо", "Фут", "Бас",
+                "Гра", "Под", "Мов", "Сло", "Роз", "Пис", "Чит", "Нав", "Роб", "Гро", "Біз",
+                "Еко", "Здо", "Хво", "Лік", "Нап", "Фру", "Ово", "М'я", "Риб",
+                "Пта", "Тва", "Кіт", "Соб", "Кві", "Дер", "Річ", "Озе", "Гор", "Мор", "Зем",
+                "Неб", "Зір", "Міс", "Віт", "Сні", "Вес", "Зем", "Вул", "Буд",
+                "Ква", "Кім", "Две", "Вік", "Схо", "Меб", "Лам", "Ком", "Тел", "Авт", "Вел",
+                "Пош", "Зам", "Клю", "Маг", "Рин", "Пар", "Міс", "Зал", "Аер", "Мов", "Сло", "Вчи", "Уче",
+                "при", "дяк", "буд", "кох", "род", "дру", "укр", "мов", "їжа", "вод",
+                "сон", "дощ", "зим", "вес", "літ", "осі", "міс", "сел", "люб", "діт", "шко", "вчи",
+                "кни", "муз", "теа", "філ", "мис", "іст", "кул", "спо", "фут", "бас",
+                "гра", "под", "мов", "сло", "роз", "пис", "чит", "нав", "роб", "гро", "біз",
+                "еко", "здо", "хво", "лік", "нап", "фру", "ово", "м'я", "риб",
+                "пта", "тва", "кіт", "соба", "кві", "дер", "річ", "озе", "гор", "мор", "зем",
+                "неб", "зір", "міс", "віт", "сні", "вес", "зем", "вул", "буд",
+                "ква", "кім", "две", "вік", "схо", "меб", "лам", "ком", "тел", "авт", "вел",
+                "пош", "зам", "клю", "маг", "рин", "пар", "міс", "зал", "аер", "мов", "сло", "вчи", "уче",
+                "я", "Я", "Ти", "ти", "Ми", "ми"
+        };
+
+        ArrayList<String> wordsList = new ArrayList<>(Arrays.asList(words));
+
+        String pathOf = "decriptBrdForse.txt";
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(pathOf))) {
+            String line = bufferedReader.readLine();  //C:\Users\admin\training\julia.exe\bin\new text.txt
+            char[] newElement = new char[line.length()];
+            boolean found = false;
+            for (int key = 1; key < elementsOfAlphabetic.length; key++) {
+                for (int b = 0; b < line.length(); b++) {
+                    char[] elementsOfReader = line.toCharArray();
+                    int index = search(elementsOfAlphabetic, elementsOfReader[b]);
+                    int newIndex = (index - key + elementsOfAlphabetic.length) % elementsOfAlphabetic.length;
+                    if (newIndex == -1) {
+                        newIndex = index;
+                    }
+                    newElement[b] = elementsOfAlphabetic[newIndex];
+                }
+
+                String sub = String.valueOf(newElement);
+                String substringFromString = sub.substring(0, 3);
+
+                for (int c = 0; c < words.length; c++) {
+                    if (wordsList.contains(substringFromString)) {
+                        System.out.println("Ваші данні розшифровано!");
+                        System.out.println("Ключ: " + key);
+                        c = words.length + 1;
+                        key = elementsOfAlphabetic.length + 1;
+                        bufferedWriter.write(sub);
+                    } else {
+                        continue;
+                    }
+                }
+            }
+            bufferedReader.close();
+            bufferedWriter.close();
+            readFile(pathOf);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -167,68 +232,6 @@ public class Main {
             }
         }
         return -1;
-    }
-    public static void brdForce(String path) {
-        String[] words = new String[]{
-                "При", "Дяк", "Буд", "Кох", "Род", "Дру", "Укр", "Мов", "Їжа", "Вод",
-                "Сон", "Дощ", "Зим", "Вес", "Літ", "Осі", "Міс", "Сел", "Люб", "Діт", "Шко", "Вчи",
-                "Кни", "Муз", "Теа", "Філ", "Мис", "Іст", "Кул", "Спо", "Фут", "Бас",
-                "Гра", "Под", "Мов", "Сло", "Роз", "Пис", "Чит", "Нав", "Роб", "Гро", "Біз",
-                "Еко", "Здо", "Хво", "Лік", "Нап", "Фру", "Ово", "М'я", "Риб",
-                "Пта", "Тва", "Кіт", "Соб", "Кві", "Дер", "Річ", "Озе", "Гор", "Мор", "Зем",
-                "Неб", "Зір", "Міс","Віт","Сні", "Вес", "Зем", "Вул", "Буд",
-                "Ква", "Кім", "Две", "Вік", "Схо", "Меб", "Лам", "Ком", "Тел", "Авт", "Вел",
-                "Пош", "Зам", "Клю", "Маг", "Рин", "Пар", "Міс", "Зал", "Аер", "Мов", "Сло", "Вчи", "Уче",
-                "при", "дяк", "буд", "кох", "род", "дру", "укр", "мов", "їжа", "вод",
-                "сон", "дощ", "зим", "вес", "літ", "осі", "міс", "сел", "люб", "діт", "шко", "вчи",
-                "кни", "муз", "теа", "філ", "мис", "іст", "кул", "спо", "фут", "бас",
-                "гра", "под", "мов", "сло", "роз", "пис", "чит", "нав", "роб", "гро", "біз",
-                "еко", "здо", "хво", "лік", "нап", "фру", "ово", "м'я", "риб",
-                "пта", "тва", "кіт", "соба", "кві", "дер", "річ", "озе", "гор", "мор", "зем",
-                "неб", "зір", "міс", "віт", "сні", "вес", "зем", "вул", "буд",
-                "ква", "кім", "две", "вік", "схо", "меб", "лам", "ком", "тел", "авт", "вел",
-                "пош", "зам", "клю", "маг", "рин", "пар", "міс", "зал", "аер", "мов", "сло", "вчи", "уче",
-                "я", "Я", "Ти", "ти", "Ми", "ми"
-        };
-        ArrayList<String> wordsList = new ArrayList<>(Arrays.asList(words));
-
-        String pathOf = "decriptBrdForse.txt";
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(pathOf)))
-        {
-            String line = bufferedReader.readLine();  //C:\Users\admin\training\julia.exe\bin\new text.txt
-            char[] newElement = new char[line.length()];
-            boolean found = false;
-            for (int key = 1;key < elementsOfAlphabetic.length; key++){
-                for (int b = 0; b < line.length(); b++) {
-                    char[] elementsOfReader = line.toCharArray();
-                    int index = search(elementsOfAlphabetic,elementsOfReader[b]);
-                    int newIndex = (index - key + elementsOfAlphabetic.length) % elementsOfAlphabetic.length;
-                    if(newIndex == -1){
-                        newIndex = index;
-                    }
-                    newElement[b] = elementsOfAlphabetic[newIndex];
-                }
-                String sub = String.valueOf(newElement);
-                String substringFromString = sub.substring(0, 3);
-
-                for (int c = 0; c < words.length; c++) {
-                    if (wordsList.contains(substringFromString)) {
-                        System.out.println("Ваші данні розшифровано!");
-                        c = words.length + 1;
-                        key = elementsOfAlphabetic.length + 1;
-                        bufferedWriter.write(sub);
-                    }else{
-                        continue;
-                    }
-                }
-            }
-            bufferedReader.close();
-            bufferedWriter.close();
-            readFile(pathOf);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
 
