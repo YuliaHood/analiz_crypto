@@ -35,11 +35,11 @@ public class Main {
                 path = scanner.nextLine();
             }
         }
-        String userSign = scanner.nextLine();
         System.out.println("Оберіть що саме ви хочете зробити з данними файлу :\n" +
                 "Якщо ви хочете зашифрувати данні шифром Цезаря , введіть " + "+\n" +
                 "Якщо ви хочете розшифрувати данні шифром Цезаря , введіть " + "-\n" +
                 "Якщо ви хочете використати метод \"brude force\" , введіть" + "!");
+        String userSign = scanner.nextLine();
 
         int key = 0;
         if(userSign.equals("!")){
@@ -47,7 +47,6 @@ public class Main {
         }else {
             System.out.println("Тепер введіть ключ " + "(Обовязково число!)");
             boolean useNotTrue = false;
-            key = 0;
             while (!useNotTrue) {
                 String userInputNumber = scanner.nextLine();
                 if (userInputNumber.matches("\\d+")) {
@@ -59,14 +58,8 @@ public class Main {
             }
         }
 
-//        System.out.println("Оберіть що саме ви хочете зробити з данними файлу :\n" +
-//                "Якщо ви хочете зашифрувати данні шифром Цезаря , введіть " + "+\n" +
-//                "Якщо ви хочете розшифрувати данні шифром Цезаря , введіть " + "-\n" +
-//                "Якщо ви хочете використати метод \"brude force\" , введіть" + "!");
-
         boolean check = false;
         while (!check) {
-            //String userSign = scanner.nextLine();
             if (userSign.equals("+")) {
                 encrypt(path, key);
                 check = true;
