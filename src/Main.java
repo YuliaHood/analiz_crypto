@@ -3,6 +3,8 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -33,33 +35,47 @@ public class Main {
                 path = scanner.nextLine();
             }
         }
+        String userSign = scanner.nextLine();
+        System.out.println("Оберіть що саме ви хочете зробити з данними файлу :\n" +
+                "Якщо ви хочете зашифрувати данні шифром Цезаря , введіть " + "+\n" +
+                "Якщо ви хочете розшифрувати данні шифром Цезаря , введіть " + "-\n" +
+                "Якщо ви хочете використати метод \"brude force\" , введіть" + "!");
 
-        System.out.println("Тепер введіть ключ " + "(Обовязково число!)");
-        boolean useNotTrue = false;
         int key = 0;
-        while (!useNotTrue) {
-            String userInputNumber = scanner.nextLine();
-            if (userInputNumber.matches("\\d+")) {
-                key = Integer.parseInt(userInputNumber);
-                break;
-            } else {
-                System.out.println("Введений символ не є числом! Спробуйте ще раз)");
+        if(userSign.equals("!")){
+            System.out.println("Ключ вводити не потрібно!");
+        }else {
+            System.out.println("Тепер введіть ключ " + "(Обовязково число!)");
+            boolean useNotTrue = false;
+            key = 0;
+            while (!useNotTrue) {
+                String userInputNumber = scanner.nextLine();
+                if (userInputNumber.matches("\\d+")) {
+                    key = Integer.parseInt(userInputNumber);
+                    break;
+                } else {
+                    System.out.println("Введений символ не є числом! Спробуйте ще раз)");
+                }
             }
         }
 
-        System.out.println("Оберіть що саме ви хочете зробити з данними файлу :\n" +
-                "Якщо ви хочете зашифрувати данні шифром Цезаря , введіть " + "+\n" +
-                "Якщо ви хочете розшифрувати данні шифром Цезаря , введіть " + "-");
+//        System.out.println("Оберіть що саме ви хочете зробити з данними файлу :\n" +
+//                "Якщо ви хочете зашифрувати данні шифром Цезаря , введіть " + "+\n" +
+//                "Якщо ви хочете розшифрувати данні шифром Цезаря , введіть " + "-\n" +
+//                "Якщо ви хочете використати метод \"brude force\" , введіть" + "!");
 
-        boolean cheak = false;
-        while (!cheak) {
-            String userSign = scanner.nextLine();
+        boolean check = false;
+        while (!check) {
+            //String userSign = scanner.nextLine();
             if (userSign.equals("+")) {
                 encrypt(path, key);
-                cheak = true;
+                check = true;
             } else if (userSign.equals("-")) {
                 decrypt(path, key);
-                cheak = true;
+                check = true;
+            } else if (userSign.equals("!")) {
+                brdForce(path);
+                check = true;
             } else {
                 System.out.println("Введіть вірний символ!");
             }
@@ -96,7 +112,7 @@ public class Main {
             char[] charArray = lines.toCharArray();
             for (int i = 0; i < lines.length(); i++) {
                 int index = search(elementsOfAlphabetic, charArray[i]);
-                if(index == -1){
+                if (index == -1) {
                     continue;
                 }
                 int newIndex = (index - key) % elementsOfAlphabetic.length;
@@ -159,4 +175,68 @@ public class Main {
         }
         return -1;
     }
+    public static void brdForce(String path) {
+        String[] words = new String[]{
+                "При", "Дяк", "Буд", "Кох", "Род", "Дру", "Укр", "Мов", "Їжа", "Вод",
+                "Сон", "Дощ", "Зим", "Вес", "Літ", "Осі", "Міс", "Сел", "Люб", "Діт", "Шко", "Вчи",
+                "Кни", "Муз", "Теа", "Філ", "Мис", "Іст", "Кул", "Спо", "Фут", "Бас",
+                "Гра", "Под", "Мов", "Сло", "Роз", "Пис", "Чит", "Нав", "Роб", "Гро", "Біз",
+                "Еко", "Здо", "Хво", "Лік", "Нап", "Фру", "Ово", "М'я", "Риб",
+                "Пта", "Тва", "Кіт", "Соб", "Кві", "Дер", "Річ", "Озе", "Гор", "Мор", "Зем",
+                "Неб", "Зір", "Міс","Віт","Сні", "Вес", "Зем", "Вул", "Буд",
+                "Ква", "Кім", "Две", "Вік", "Схо", "Меб", "Лам", "Ком", "Тел", "Авт", "Вел",
+                "Пош", "Зам", "Клю", "Маг", "Рин", "Пар", "Міс", "Зал", "Аер", "Мов", "Сло", "Вчи", "Уче",
+                "при", "дяк", "буд", "кох", "род", "дру", "укр", "мов", "їжа", "вод",
+                "сон", "дощ", "зим", "вес", "літ", "осі", "міс", "сел", "люб", "діт", "шко", "вчи",
+                "кни", "муз", "теа", "філ", "мис", "іст", "кул", "спо", "фут", "бас",
+                "гра", "под", "мов", "сло", "роз", "пис", "чит", "нав", "роб", "гро", "біз",
+                "еко", "здо", "хво", "лік", "нап", "фру", "ово", "м'я", "риб",
+                "пта", "тва", "кіт", "соба", "кві", "дер", "річ", "озе", "гор", "мор", "зем",
+                "неб", "зір", "міс", "віт", "сні", "вес", "зем", "вул", "буд",
+                "ква", "кім", "две", "вік", "схо", "меб", "лам", "ком", "тел", "авт", "вел",
+                "пош", "зам", "клю", "маг", "рин", "пар", "міс", "зал", "аер", "мов", "сло", "вчи", "уче",
+                "я", "Я", "Ти", "ти", "Ми", "ми"
+        };
+        ArrayList<String> wordsList = new ArrayList<>(Arrays.asList(words));
+
+        String pathOf = "decriptBrdForse.txt";
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(pathOf)))
+        {
+            String line = bufferedReader.readLine();  //C:\Users\admin\training\julia.exe\bin\new text.txt
+            char[] newElement = new char[line.length()];
+            boolean found = false;
+            for (int key = 1;key < elementsOfAlphabetic.length; key++){
+                for (int b = 0; b < line.length(); b++) {
+                    char[] elementsOfReader = line.toCharArray();
+                    int index = search(elementsOfAlphabetic,elementsOfReader[b]);
+                    int newIndex = (index - key + elementsOfAlphabetic.length) % elementsOfAlphabetic.length;
+                    if(newIndex == -1){
+                        newIndex = index;
+                    }
+                    newElement[b] = elementsOfAlphabetic[newIndex];
+                }
+                String sub = String.valueOf(newElement);
+                String substringFromString = sub.substring(0, 3);
+
+                for (int c = 0; c < words.length; c++) {
+                    if (wordsList.contains(substringFromString)) {
+                        System.out.println("Ваші данні розшифровано!");
+                        c = words.length + 1;
+                        key = elementsOfAlphabetic.length + 1;
+                        bufferedWriter.write(sub);
+                    }else{
+                        continue;
+                    }
+                }
+            }
+            bufferedReader.close();
+            bufferedWriter.close();
+            readFile(pathOf);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+
+
