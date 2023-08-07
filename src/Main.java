@@ -50,24 +50,26 @@ public class Main {
         String userSign = scanner.nextLine();
 
         int key = 0;
-        if (userSign.equals("!")) {
-            System.out.println("Ключ вводити не потрібно!");
-        } else if (userSign.equals("+") || userSign.equals("-")) {
-            System.out.println("Тепер введіть ключ " + "(Обовязково число!)");
-            boolean useNotTrue = false;
-            while (!useNotTrue) {
-                String userInputNumber = scanner.nextLine();
-                if (userInputNumber.matches("\\d+")) {
-                    key = Integer.parseInt(userInputNumber);
-                    useNotTrue = true;
-                } else {
-                    System.out.println("Введений символ не є числом! Спробуйте ще раз)");
-                }
-            }
-        }
 
         boolean check = false;
         while (!check) {
+
+            if (userSign.equals("!")) {
+                System.out.println("Ключ вводити не потрібно!");
+            } else if (userSign.equals("+") || userSign.equals("-")) {
+                System.out.println("Тепер введіть ключ " + "(Обовязково число!)");
+                boolean useNotTrue = false;
+                while (!useNotTrue) {
+                    String userInputNumber = scanner.nextLine();
+                    if (userInputNumber.matches("\\d+")) {
+                        key = Integer.parseInt(userInputNumber);
+                        useNotTrue = true;
+                    } else {
+                        System.out.println("Введений символ не є числом! Спробуйте ще раз)");
+                    }
+                }
+            }
+
             if (userSign.equals("+")) {
                 encrypt(path, key);
                 check = true;
@@ -80,7 +82,6 @@ public class Main {
             } else {
                 System.out.println("Введіть вірний символ!");
                 userSign = scanner.nextLine();
-                continue;
             }
         }
     }
