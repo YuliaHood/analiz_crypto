@@ -43,23 +43,23 @@ public class Main {
         }
 
         System.out.println("Оберіть що саме ви хочете зробити з данними файлу :\n" +
-                "Якщо ви хочете зашифрувати данні шифром Цезаря , введіть " + "+\n" +
-                "Якщо ви хочете розшифрувати данні шифром Цезаря , введіть " + "-\n" +
-                "Якщо ви хочете використати метод \"brude force\" , введіть" + "!");
+                "Якщо ви хочете зашифрувати данні шифром Цезаря , введіть " + "\"+\"\n" +
+                "Якщо ви хочете розшифрувати данні шифром Цезаря , введіть " + "\"-\"\n" +
+                "Якщо ви хочете використати метод \"brute force\" , введіть" + " \"!\"");
 
         String userSign = scanner.nextLine();
 
         int key = 0;
         if (userSign.equals("!")) {
             System.out.println("Ключ вводити не потрібно!");
-        } else {
+        } else if (userSign.equals("+") || userSign.equals("-")) {
             System.out.println("Тепер введіть ключ " + "(Обовязково число!)");
             boolean useNotTrue = false;
             while (!useNotTrue) {
                 String userInputNumber = scanner.nextLine();
                 if (userInputNumber.matches("\\d+")) {
                     key = Integer.parseInt(userInputNumber);
-                    break;
+                    useNotTrue = true;
                 } else {
                     System.out.println("Введений символ не є числом! Спробуйте ще раз)");
                 }
@@ -75,10 +75,12 @@ public class Main {
                 decrypt(path, key);
                 check = true;
             } else if (userSign.equals("!")) {
-                brdForce(path);
+                brtForce(path);
                 check = true;
             } else {
                 System.out.println("Введіть вірний символ!");
+                userSign = scanner.nextLine();
+                continue;
             }
         }
     }
@@ -132,7 +134,7 @@ public class Main {
         }
     }
 
-    public static void brdForce(String path) {
+    public static void brtForce(String path) {
 
         String[] words = new String[]{
                 "При", "Дяк", "Буд", "Кох", "Род", "Дру", "Укр", "Мов", "Їжа", "Вод",
